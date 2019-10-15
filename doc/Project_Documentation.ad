@@ -13,7 +13,6 @@ Table of contents
 * UML Sequence Diagram
 * UML Use case Diagram
 * Use Cases
-* Unit Test Cases
 * Integration Test Cases
 * Work Journal
 
@@ -264,118 +263,6 @@ UC06 - Get Help:::
         requested.
         
 
-Unit Test Cases
----------------
-
-Item
-~~~~
-
-.Item Test Cases
-[width="100%",options="header"]
-|====================
-| Input                 | Expected     | Output       | Approval 
-| Item("")              | ItemNameExc. | ItemNameExc. | OK 
-| Item(" ")             | ItemNameExc. | ItemNameExc. | OK 
-| Item("123")           | ItemNameExc. | ItemNameExc. | OK 
-| Item("abc")           | -            | -            | OK 
-| Item("", 1, 1)        | ItemNameExc. | ItemNameExc. | OK 
-| Item("abc", -1, -1)   | ItemReplExc. | ItemReplExc. | OK 
-| Item("abc", 101, 101) | ItemReplExc. | ItemReplExc. | OK 
-| Item("abc", 0, 100)   | -            | -            | OK 
-|====================
-
-Door
-~~~~
-
-.Door Test Cases
-[width="100%",options="header"]
-|====================
-| Input                       | Expected             | Output               | Approval 
-| Door("a", Item("key"))      | -                    | -                    | OK
-| canUseWith(Item("a", 1, 1)) | false                | false                | OK 
-| canUseWith(Item("a"))       | true                 | true                 | OK 
-| isLocked()                  | true                 | true                 | OK 
-| useWith(Item("abc"))        | "That won't work..." | "That won't work..." | OK 
-| useWith(Item("key"))        | "The key clicks..."  | "The key clicks..."  | OK 
-| isLocked()                  | false                | false                | OK 
-|====================
-
-Room
-~~~~
-
-.Room Test Cases
-[width="100%",options="header"]
-|====================
-| Input                                      | Expected | Output | Approval 
-| Room("rm1", "A room.")                     | -        | -      | OK
-| Room("rm2", "Another room")                | -        | -      | OK
-| getOpposite(WEST)                          | EAST     | EAST   | OK
-| parseDirection("NoRtH")                    | NORTH    | NORTH  | OK
-| parseDirection("w")                        | WEST     | WEST   | OK
-| rm1.setNext(NORTH, rm2)                    | -        | -      | OK
-| rm1.getNext(NORTH)                         | rm2      | rm2    | OK
-| rm1.canGo(NORTH)                           | true     | true   | OK
-| rm2.canGo(SOUTH)                           | false    | false  | OK
-| rm1.setDoor(NORTH, Door("d", Item("key"))) | -        | -      | OK
-| rm1.canGo(NORTH)                           | false    | false  | OK
-|====================
-
-FileHandler
-~~~~~~~~~~~
-_(Shortened to FH for convenience)_
-
-[NOTE]
-For the purposes of this test, it is assumed, that there
-is a file named "test.txt" in an adjacent folder to the
-executable. The file "nonexistent.txt" does not exist.
-
-The contents of "test.txt"
-```
-#This is a comment and will be ignored
-This is invalid and will be ignored
-prop1=Hello! #End-of-line comment
-prop2 = 42
-```
-
-.FileHandler Test Cases
-[width="100%",options="header"]
-|====================
-| Input                              | Expected        | Output          | Approval 
-| fherr=FH("nonexistent.txt")        | -               | -               | OK
-| fh=FH("test.txt", "test", WARNING) | -               | -               | OK
-| fh.getFilename()                   | test.txt        | test.txt        | OK
-| fh.loadFile()                      | -               | -               | OK
-| fh.getProp("prop1")                | Hello!          | Hello!          | OK
-| fh.getProp("prop2")                | 42              | 42              | OK
-| fh.hasProp("prop1")                | true            | true            | OK
-| fh.getPropInt("prop1")             | [WARNING]...    | [WARNING]...    | OK
-| fh.getPropInt("prop2")             | 42              | 42              | OK
-| fherr.getProp("prop1")             | InvalidPropExc. | InvalidPropExc. | OK
-| fherr.hasProp("prop1")             | false           | false           | OK
-| fherr.loadFile()                   | (Sys Exit)      | (Sys Exit)      | OK
-|====================
-
-Level
-~~~~~
-[NOTE]
-This unit test will mainly return empty values.
-To test how it works in conjunction with the other
-classes, see the "Level Loading" Integration test
-
-.Level Test Cases
-[width="100%",options="header"]
-|====================
-| Input                        | Expected         | Output          | Approval 
-| Level(0)                     | LevelNumberExc.  | LevelNumberExc. | OK
-| Level(26)                    | LevelNumberExc.  | LevelNumberExc. | OK
-| Level(1)                     | -                | -               | OK
-| lvl.findRoom("nonexistent")  | RoomNameExc.     | RoomNameExc.    | OK
-| lvl.loadMap("nonexistent")   | (Sys Exit)       | (Sys Exit)      | OK
-| lvl.getNumber()              | 1                | 1               | OK
-| lvl.getRooms()               | (Empty Array)    | (Empty Array)   | OK
-|====================
-
-
 Integration Test Cases
 ----------------------
 
@@ -383,8 +270,8 @@ Integration Test Cases
 Work Journal
 ------------
 
-Day - 1
-~~~~~~~
+Day-1
+~~~~~
 1/13/2019
 
 ---
@@ -422,36 +309,3 @@ using alternate paths.
 Finally, we were finished with most of the
 planning stage and planned to start programming
 next time.
-
-Day - 2
-~~~~~~~
-13/10/2019
-
----
-Over the weekend we both chose some Classes to
-create and individually unit-test. We occasionally
-had some issues and had to discuss how the files
-should be loaded. However, we were able to standardise
-our system so that if we wanted to add any more new
-features, then it is easily expandable.
-
-Amin took the Item, Interactable, Door and Room
-classes and implemented and tested them. Sam took on
-the Level and FileHandler classes. These were not as
-simple as the others. The level class contained one
-rather monolithic function for loading all the world
-attributes into the rooms from a file.
-
-Due to the Item class being created first it was
-documented far more in-depth than the other ones.
-it was documented the most in-depth. We discussed
-writing a seperate documention for each class in order
-to more completely document each part of the game.
-
-Sadly, the time is lacking, due to our early slacking
-in the project and we will keep the shortened
-documentation. We will always have time to add the
-improved documentation later.
-
-We hope to finish off the remaining classes during our
-free time over the next week.
