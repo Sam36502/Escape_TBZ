@@ -7,6 +7,7 @@ public class Door implements Interactable {
 	private boolean locked;
 	private String succmsg;
 	private String failmsg;
+	private String interactmsg;
 	
 	/// CONSTRUCTORS ///
 	
@@ -17,15 +18,17 @@ public class Door implements Interactable {
 		this.locked = true;
 		this.succmsg = "The lock clicks and the door swings open";
 		this.failmsg = "This won't work on this door.";
+		this.interactmsg = "This is a large wooden door.";
 	}
 	
-	public Door(String name, Item keyItem, String succmsg, String failmsg) {
+	public Door(String name, Item keyItem, String succmsg, String failmsg, String interactmsg) {
 		super();
 		this.name = name;
 		this.keyItem = keyItem;
 		this.locked = true;
 		this.succmsg = succmsg;
 		this.failmsg = failmsg;
+		this.interactmsg = interactmsg;
 	}
 	
 	public Door(String name, Item keyItem, boolean locked) {
@@ -35,15 +38,17 @@ public class Door implements Interactable {
 		this.locked = locked;
 		this.succmsg = "The lock clicks and the door swings open";
 		this.failmsg = "This won't work on this door.";
+		this.interactmsg = "This is a large wooden door.";
 	}
 	
-	public Door(String name, Item keyItem, String succmsg, String failmsg, boolean locked) {
+	public Door(String name, Item keyItem, String succmsg, String failmsg, String interactmsg, boolean locked) {
 		super();
 		this.name = name;
 		this.keyItem = keyItem;
 		this.locked = locked;
 		this.succmsg = succmsg;
 		this.failmsg = failmsg;
+		this.interactmsg = interactmsg;
 	}
 	
 	/// GETTERS & SETTERS ///
@@ -66,6 +71,11 @@ public class Door implements Interactable {
 
 	public void unlock() {
 		this.locked = false;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 	
 	/// INTERACTABLE METHODS ///
@@ -102,9 +112,9 @@ public class Door implements Interactable {
 	public String interact() {
 		
 		if (this.isLocked()) {
-			return "This is a very large door blocking your path.";
+			return interactmsg + " The path is blocked.";
 		} else {
-			return "This is a very large door that is unlocked and open.";
+			return interactmsg + " The path is open.";
 		}
 			
 	}

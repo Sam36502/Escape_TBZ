@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/sam/Documents/GitHub/Escape_TBZ/lib/SimpleTUI_2.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sam/Documents/GitHub/Escape_TBZ/lib/SimpleTUI_2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

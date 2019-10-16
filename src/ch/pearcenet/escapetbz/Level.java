@@ -8,6 +8,9 @@ public class Level {
 	private int number;
 	private Room[] rooms;
 	private FileHandler file;
+	private Room start;
+	private Room end;
+	private final FileHandler.Lvl REPORTING_LVL = FileHandler.Lvl.ERROR;
 	
 	/// CONSTRUCTORS ///
 	
@@ -32,31 +35,46 @@ public class Level {
 		return rooms;
 	}
 	
+	public Room getStart() {
+		return start;
+	}
+	
+	public Room getEnd() {
+		return end;
+	}
+	
 	/// PRIVATE METHODS ///
 	
 	// Loads all necessary door information from the filehandler
 	private Door loadDoor(String direction, String name) {
-		if (file.hasProp(name + "door." + direction)) {
-			String doorName = file.getProp(name + "door." + direction);
-			String keyName = file.getProp(name + "door." + direction + ".key");
+		
+		if (file.hasProp(name + ".door." + direction)) {
+			file.log(FileHandler.Lvl.INFO, "    Loading door " + direction + "...");
+			
+			String doorName = file.getProp(name + ".door." + direction);
+			String keyName = file.getProp(name + ".door." + direction + ".key");
 			
 			boolean locked = true;
-			if (file.hasProp(name + "door." + direction + ".locked"))
-				locked = "true".equals(file.getProp(name + "door." + direction + ".locked"));
+			if (file.hasProp(name + ".door." + direction + ".locked"))
+				locked = "true".equals(file.getProp(name + ".door." + direction + ".locked"));
 			
-			if (file.hasProp(name + "door." + direction + ".succmsg") &&
-				file.hasProp(name + "door." + direction + ".failmsg")) {
+			if (file.hasProp(name + ".door." + direction + ".succmsg") &&
+				file.hasProp(name + ".door." + direction + ".failmsg") &&
+				file.hasProp(name + ".door." + direction + ".interactmsg")) {
 				
-				String succmsg = file.getProp(name + "door." + direction + ".succmsg");
-				String failmsg = file.getProp(name + "door." + direction + ".failmsg");
+				String succmsg = file.getProp(name + ".door." + direction + ".succmsg");
+				String failmsg = file.getProp(name + ".door." + direction + ".failmsg");
+				String interactmsg = file.getProp(name + ".door." + direction + ".interactmsg");
 				
-				return new Door(doorName, new Item(keyName), succmsg, failmsg, locked);
+				return new Door(doorName, new Item(keyName), succmsg, failmsg, interactmsg, locked);
 			} else {
 				return new Door(doorName, new Item(keyName), locked);
 			}
+			
 		} else {
 			return null;
 		}
+		
 	}
 	
 	/// PUBLIC METHODS ///
@@ -73,8 +91,7 @@ public class Level {
 	
 	// Loads all rooms and their contents from a properties file
 	public void loadMap(String filename) {
-		//TODO: Set Log Report Level to "WARNING"
-		file = new FileHandler(filename, "Level", FileHandler.Lvl.INFO);
+		file = new FileHandler(filename, "Level", REPORTING_LVL);
 		file.loadFile();
 		
 		file.log(FileHandler.Lvl.INFO, "Loading Rooms...");
@@ -84,17 +101,21 @@ public class Level {
 			String name = "rm" + roomNum;
 			
 			if (file.hasProp(name)) {
+				file.log(FileHandler.Lvl.INFO, "Loading room " + roomNum + "...");
 				
 				// Load room info
 				String desc = file.getProp(name);
 				rooms[roomNum] = new Room(name, desc);
+				file.log(FileHandler.Lvl.INFO, "  Room created: " + rooms[roomNum]);
 				
 				// Load all items in this room
+				file.log(FileHandler.Lvl.INFO, "  Loading Items...");
 				Item[] items = new Item[Console.MAX_ITEMS_PER_ROOM];
 				for (int itemNum=0; itemNum<Console.MAX_ITEMS_PER_ROOM; itemNum++) {
 					String id = name + ".i" + itemNum;
 					
 					if (file.hasProp(id)) {
+						file.log(FileHandler.Lvl.INFO, "    Loading Item " + itemNum + "...");
 						
 						String itemName = file.getProp(id);
 						if (file.hasProp(id + ".hunger") &&
@@ -107,20 +128,22 @@ public class Level {
 						} else {
 							items[itemNum] = new Item(itemName);
 						}
-						
+						file.log(FileHandler.Lvl.INFO, "    Done with Item " + itemNum + ".");
 					}
 					
 				}
 				rooms[roomNum].setItems(items);
 				
 				// Load all the doors into this room
+				file.log(FileHandler.Lvl.INFO, "  Loading doors...");
 				rooms[roomNum].setDoor(Room.Direction.NORTH, loadDoor("north", name));
 				rooms[roomNum].setDoor(Room.Direction.EAST, loadDoor("east", name));
 				rooms[roomNum].setDoor(Room.Direction.SOUTH, loadDoor("south", name));
 				rooms[roomNum].setDoor(Room.Direction.WEST, loadDoor("west", name));
 				
+				file.log(FileHandler.Lvl.INFO, "  Done with room " + roomNum + ".");
 			}
-			
+
 		}
 		
 		file.log(FileHandler.Lvl.INFO, "Done.");
@@ -135,30 +158,34 @@ public class Level {
 				Room room = findRoom(file.getProp(name + ".north"));
 				if (room != null)
 					rooms[roomNum].setNext(Room.Direction.NORTH, room);
+			}
 			
 			// Make any eastern connections from here
-			} else if (file.hasProp(name + ".east")) {
+			if (file.hasProp(name + ".east")) {
 				Room room = findRoom(file.getProp(name + ".east"));
 				if (room != null)
 					rooms[roomNum].setNext(Room.Direction.EAST, room);
+			}
 			
 			// Make any southern connections from here
-			} else if (file.hasProp(name + ".south")) {
+			if (file.hasProp(name + ".south")) {
 				Room room = findRoom(file.getProp(name + ".south"));
 				if (room != null)
 					rooms[roomNum].setNext(Room.Direction.SOUTH, room);
-			
+			}
 			
 			// Make any western connections from here
-			} else if (file.hasProp(name + ".west")) {
+			if (file.hasProp(name + ".west")) {
 				Room room = findRoom(file.getProp(name + ".west"));
 				if (room != null)
 					rooms[roomNum].setNext(Room.Direction.WEST, room);
-			} else {
-				
 			}
 			
 		}
+		
+		// Set the start and end rooms
+		start = findRoom(file.getProp("startroom"));
+		end = findRoom(file.getProp("endroom"));
 		
 		file.log(FileHandler.Lvl.INFO, "Done.");
 	}

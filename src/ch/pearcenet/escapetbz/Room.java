@@ -96,7 +96,7 @@ public class Room {
 	public Item findItem(String name) {
 		
 		for (Item curr: items) {
-			if (curr != null && name.equals(curr.getName())) {
+			if (curr != null && name.toLowerCase().equals(curr.getName().toLowerCase())) {
 				return curr;
 			}
 		}
@@ -108,8 +108,7 @@ public class Room {
 	public void removeItem(Item item) {
 		
 		for (int i=0; i<Console.MAX_ITEMS_PER_ROOM; i++) {
-			Item curr = items[i];
-			if (curr != null && name.equals(curr.getName())) {
+			if (items[i] != null && item.getName().equals(items[i].getName())) {
 				items[i] = null;
 				return;
 			}
@@ -121,7 +120,13 @@ public class Room {
 	public Interactable findInteractable(String name) {
 		
 		for (Interactable curr: interactables) {
-			if (curr != null && name.equals(curr.getName())) {
+			if (curr != null && name.toLowerCase().equals(curr.getName().toLowerCase())) {
+				return curr;
+			}
+		}
+		
+		for (Door curr: doors) {
+			if (curr != null && name.toLowerCase().equals(curr.getName().toLowerCase())) {
 				return curr;
 			}
 		}
