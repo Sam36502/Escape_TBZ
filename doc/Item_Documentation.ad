@@ -1,0 +1,84 @@
+Item Class Documentation
+========================
+:author: Samuel Pearce
+:date: 14/10/2019
+
+Contents:
+---------
+
+* Class Description
+ - Description
+ - Constructors
+ - Public Methods
+* Unit Test Cases
+* Versions
+
+Class Description
+-----------------
+
+Description
+~~~~~~~~~~~
+The Item class serves as a simple way of storing information
+about items found in the rooms of each level. There are two
+main types of items: Consumables and regular items. Regular
+items serve mainly as keys and simple novelties, while the
+consumable items help by replenishing a certain amount of the
+player's hunger and thirst meters.
+
+Constructors
+~~~~~~~~~~~~
+1st Constructor:::
+    Parameters::
+        `name`: String (Must contain at least one alphabetic character)
+    Exceptions::
+        `ItemNameException`: Thrown if the name does not contain at least one alphabetic character
+
+---
+2nd Constructor:::
+    Parameters::
+        `name`: String (Must contain at least one alphabetic character)
+        `hungerRepl`: Integer (must be between 0 and 100)
+        `thirstRepl`: Integer (must be between 0 and 100)
+    Exceptions::
+        `ItemNameException`: Thrown if the `name` does not contain at least one alphabetic character
+        `ItemReplException`: Thrown if the `hungerRepl` or `thirstRepl` are below 0 or above 100
+
+Public Methods
+~~~~~~~~~~~~~~
+getName():::
+    Parameters::
+        none
+    Returns::
+        String: `name` field's value.
+    Exceptions::
+        none
+        
+---
+isConsumable():::
+    Parameters::
+        none
+    Returns::
+        Boolean: Whether this item can be consumed
+    Exceptions::
+        none
+        
+---
+getHungerRepl():::
+    Parameters::
+        none
+    Returns::
+        Integer: `hungerRepl` field's value
+    Exceptions::
+        none
+
+---
+getThirstRepl():::
+    Parameters::
+        none
+    Returns::
+        Integer: `hungerRepl` field's value
+    Exceptions::
+        none
+
+Unit Test Cases
+---------------

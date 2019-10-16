@@ -1,0 +1,48 @@
+# Last Level
+
+# Level Attributes
+startroom = rm0
+endroom = rm4
+
+# First Room
+rm0 = You're in an eerie Classroom with nobody inside. A door leads out to the north.
+
+rm0.door.north = Metal Door
+rm0.door.north.key = Small Key
+rm0.door.north.succmsg = The door swings open swiftly.
+rm0.door.north.failmsg = The door lets out a metallic thud, but doesn't move.
+rm0.door.north.interactmsg = It's a robust metal door. Forcing it wouldn't work.
+
+rm0.i0 = Small Key
+
+rm0.i1 = Sandwich
+rm0.i1.hunger = 10
+rm0.i1.thirst = 0
+
+# Connection
+rm0.north = rm1
+rm1.south = rm0
+
+# Second Room
+rm1 = You're in an airy and bright hallway continuing to the east and west.
+
+# Connections
+rm1.west = rm2
+rm1.east = rm3
+rm2.east = rm1
+rm3.west = rm1
+
+# Third Room
+rm2 = You're at the end of the hallway.
+rm2.i0 = Rusty Key
+
+# Fourth Room
+rm3 = You're at the end of the hallway. You can see some stairs through glass doors to the south.
+rm3.door.south = Glass Door
+rm3.door.south.key = Rusty Key
+
+# Connection
+rm3.south = rm4
+
+# Exit Room
+rm4 = You see a set of stairs heading down and continue down to the next level...
