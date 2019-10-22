@@ -104,8 +104,8 @@ public class FileHandler {
 			// Parse line
 			String[] half = line.split("=");
 			if (half.length >= 2) {
-				String key = half[0].strip();
-				String value = half[1].strip();
+				String key = half[0].trim();
+				String value = half[1].trim();
 				
 				// Insert data into HashMap
 				content.put(key, value);

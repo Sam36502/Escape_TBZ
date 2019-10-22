@@ -68,10 +68,10 @@ public class Player {
 				+ "\n " + room.getDescription()
 				+ "\n"
 				+ "\nDoors:"
-				+ "\n North: " + (doors[0]==null ? "None":doors[0].getName())
-				+ "\n East: " + (doors[1]==null ? "None":doors[1].getName())
-				+ "\n West: " + (doors[2]==null ? "None":doors[2].getName())
-				+ "\n South: " + (doors[3]==null ? "None":doors[3].getName())
+				+ "\n North: " + (doors[0]==null ? "Clear":doors[0].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
+				+ "\n East: " + (doors[1]==null ? "Clear":doors[1].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
+				+ "\n South: " + (doors[2]==null ? "Clear":doors[2].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
+				+ "\n West: " + (doors[3]==null ? "Clear":doors[3].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
 				+ "\n"
 				+ "\nItems:"
 				+ "\n " + ArrayOutput.sentenceArray(room.getItems())
