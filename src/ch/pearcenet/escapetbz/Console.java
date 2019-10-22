@@ -173,7 +173,7 @@ public class Console {
 		
 		/// TERMINATION ///
 		
-		System.out.println("\n--------------------\n  GAME FINISHED  \n------------------\n\nThanks for playing!");
+		System.out.println("\n------------------\n  GAME FINISHED  \n------------------\n\nThanks for playing!");
 		
 		// Close the input scanner
 		Input.closeScanner();
@@ -186,17 +186,20 @@ public class Console {
 	public static String promptUser(Player player) {
 		
 		// Output player's stats
-		System.out.println("\n" + player + "'s Stats:"
-						+ "\n" + "-".repeat(player.getName().length()) + "----------"
-						+ "\n Hunger: " + player.getHunger() + ""
-						+ "\n Thirst: " + player.getThirst() + ""
-						+ "\n" + "-".repeat(player.getName().length()) + "----------");
+		String stats = "\n" + player + "'s Stats: \n";
+		for (int i=0; i<player.getName().length(); i++) stats += "-";
+		stats += "----------\n Hunger: " + player.getHunger()
+						 + "\n Thirst: " + player.getThirst() + "\n";
+		for (int i=0; i<player.getName().length(); i++) stats += "-";
+		stats += "----------";
+		
+		System.out.println(stats);
 		
 		// Get user input and parse it
 		String command = Input.getString();
 		
 		// Split cmd from front of command
-		command = command.strip();
+		command = command.trim();
 		
 		String cmd = null;
 		String arg1 = null;
