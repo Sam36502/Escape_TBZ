@@ -10,7 +10,6 @@ public class Level {
 	private FileHandler file;
 	private Room start;
 	private Room end;
-	private final FileHandler.Lvl REPORTING_LVL = FileHandler.Lvl.ERROR;
 	
 	/// CONSTRUCTORS ///
 	
@@ -91,7 +90,7 @@ public class Level {
 	
 	// Loads all rooms and their contents from a properties file
 	public void loadMap(String filename) {
-		file = new FileHandler(filename, "Level", REPORTING_LVL);
+		file = new FileHandler(filename, "Level");
 		file.loadFile();
 		
 		file.log(FileHandler.Lvl.INFO, "Loading Rooms...");
@@ -133,6 +132,50 @@ public class Level {
 					
 				}
 				rooms[roomNum].setItems(items);
+				
+				// Load all interactables in this room
+				file.log(FileHandler.Lvl.INFO, "  Loading NPCs...");
+				NPC[] npcs = new NPC[Console.MAX_ITEMS_PER_ROOM];
+				for (int interNum=0; interNum<Console.MAX_ITEMS_PER_ROOM; interNum++) {
+					String id = name + ".npc" + interNum;
+					
+					if (file.hasProp(id)) {
+						file.log(FileHandler.Lvl.INFO, "    Loading NPC " + interNum + "...");
+						
+						String defMsg = null;
+						String defCmd = null;
+						
+						String interName = file.getProp(id);
+						if (file.hasProp(id + ".def.msg") &&
+							file.hasProp(id + ".def.cmd")) {
+							
+							defMsg = file.getProp(id + ".def.msg");
+							defCmd = file.getProp(id + ".def.cmd");
+							
+						} else {
+							file.log(FileHandler.Lvl.ERROR, "    Unfinished NPC " + interNum + ".");
+						}
+						
+						NPC newNpc = null;
+						if (file.hasProp(id + ".itm") &&
+							file.hasProp(id + ".itm.msg") &&
+							file.hasProp(id + ".itm.cmd")) {
+							
+							newNpc = new NPC(interName, defMsg, defCmd,
+											 new Item(file.getProp(id + ".itm")),
+											 file.getProp(id + ".itm.msg"),
+											 file.getProp(id + ".itm.cmd"));
+						} else {
+							newNpc = new NPC(interName, defMsg, defCmd);
+						}
+						
+						npcs[interNum] = newNpc;
+						file.log(FileHandler.Lvl.INFO, "    Done with NPCs " + interNum + ".");
+					}
+					
+				}
+				rooms[roomNum].setItems(items);
+				rooms[roomNum].setNPCs(npcs);
 				
 				// Load all the doors into this room
 				file.log(FileHandler.Lvl.INFO, "  Loading doors...");

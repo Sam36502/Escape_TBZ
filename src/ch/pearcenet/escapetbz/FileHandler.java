@@ -19,7 +19,6 @@ public class FileHandler {
 	private String filename;
 	private HashMap<String, String> content;
 	private String logName;
-	private Lvl reportLvl;
 	
 	/// CONSTRUCTORS ///
 	
@@ -30,11 +29,10 @@ public class FileHandler {
 		this.content = new HashMap<>();
 	}
 	
-	public FileHandler(String filename, String logName, Lvl ReportLvl) {
+	public FileHandler(String filename, String logName) {
 		super();
 		this.filename = filename;
 		this.logName = logName;
-		this.reportLvl = ReportLvl;
 		this.content = new HashMap<>();
 		log(Lvl.INFO, "Filehandler Initialized and Logging is enabled.");
 	}
@@ -70,12 +68,19 @@ public class FileHandler {
 	/// PUBLIC METHODS ///
 	
 	public void log(Lvl level, String msg) {
-		if (logName != null && level.ordinal() >= reportLvl.ordinal()) {
-			System.out.println("[" + level + "] " + logName + ": " + msg);
-		}
-		
 		if (level == Lvl.ERROR) {
+			
+			if (logName != null && level.ordinal() >= Console.LOGLEVEL.ordinal()) {
+				System.err.println("[" + level + "] " + logName + ": " + msg);
+			}
 			System.exit(1);
+			
+		} else {
+			
+			if (logName != null && level.ordinal() >= Console.LOGLEVEL.ordinal()) {
+				System.out.println("[" + level + "] " + logName + ": " + msg);
+			}
+			
 		}
 	}
 	

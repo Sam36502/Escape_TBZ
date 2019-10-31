@@ -1,5 +1,7 @@
 package ch.pearcenet.escapetbz;
 
+import ch.pearcenet.escapetbz.exceptions.RoomFullException;
+
 public class Room {
 	
 	public enum Direction {
@@ -13,7 +15,7 @@ public class Room {
 	private String description;
 	private Room[] next = new Room[4];
 	private Item[] items = new Item[Console.MAX_ITEMS_PER_ROOM];
-	private Interactable[] interactables = new Interactable[Console.MAX_INTERACTABLE_PER_ROOM];
+	private NPC[] npcs = new NPC[Console.MAX_INTERACTABLE_PER_ROOM];
 	private Door[] doors = new Door[4];
 	
 	/// CONSTRUCTORS ///
@@ -47,12 +49,12 @@ public class Room {
 		this.doors[dir.ordinal()] = newDoor;
 	}
 	
-	public Interactable[] getInteractables() {
-		return interactables;
+	public NPC[] getNPCs() {
+		return npcs;
 	}
 
-	public void setInteractables(Interactable[] interactables) {
-		this.interactables = interactables;
+	public void setNPCs(NPC[] npcs) {
+		this.npcs = npcs;
 	}
 
 	public String getName() {
@@ -92,6 +94,17 @@ public class Room {
 		return true;
 	}
 	
+	// Places an item in this room
+	public void addItem(Item item) {
+		for (int i=0; i<Console.MAX_ITEMS_PER_ROOM; i++) {
+			if (items[i] == null) {
+				items[i] = item;
+				return;
+			}
+		}
+		throw new RoomFullException("Tried to add item to room that was full.");
+	}
+	
 	// Returns an item matching the name given in this room
 	public Item findItem(String name) {
 		
@@ -119,7 +132,7 @@ public class Room {
 	// Returns an Interactable object found in this room by name
 	public Interactable findInteractable(String name) {
 		
-		for (Interactable curr: interactables) {
+		for (Interactable curr: npcs) {
 			if (curr != null && name.toLowerCase().equals(curr.getName().toLowerCase())) {
 				return curr;
 			}

@@ -8,7 +8,7 @@ import ch.pearcenet.tui.output.ArrayOutput;
 public class Console {
 	
 	// GLOBAL CONSTANTS
-	public static final String VERSION = "v1.0";
+	public static final String VERSION = "v1.1";
 	public static final int MAX_FLOORS = 25;
 	public static final int MAX_PLAYERS = 4;
 	public static final int MAX_INVENTORY = 10;
@@ -19,18 +19,28 @@ public class Console {
 	public static final int MAX_ROOMS_PER_FLOOR = 50;
 	public static final int MAX_INTERACTABLE_PER_ROOM = 10;
 	
+	// Error reporting level
+	public static FileHandler.Lvl LOGLEVEL = FileHandler.Lvl.ERROR;
+	
 	public static void main(String[] args) {
 		
 		/// SETUP ///
 		
 		// Get world folder from arguments
 		File worldFolder = null;
-		if (args.length == 1) {
+		if (args.length >= 1) {
 			worldFolder = new File(args[0]);
+			
 			if (!worldFolder.exists() || !worldFolder.isDirectory()) {
 				System.out.println("Please specify a valid folder path to load the levels from.");
 				System.exit(0);
 			}
+			
+			if (args.length > 1 && ("-t".equals(args[1]) || "--trace".equals(args[1]))) {
+				System.out.println("[INFO] Logging Info to console activated.");
+				LOGLEVEL = FileHandler.Lvl.INFO;
+			}
+			
 		} else {
 			System.out.println("Please specify a valid folder path to load the levels from.");
 			System.exit(0);
@@ -136,15 +146,74 @@ public class Console {
 							break;
 						}
 						
-						// Check the noturn flag
-						if (result.length() >= 8 &&"%noturn%".equals(result.substring(result.length() - 8))) {
+						// Check return flags
+						String flag;
+						
+						flag = checkFlag(result, "noturn");
+						if (flag != null) {
 							mv--;
-							result = result.substring(0, result.length() - 8);
+							result = flag;
 						}
 						
-						// Check the endturn flag
-						if (result.length() >= 9 &&"%endturn%".equals(result.substring(result.length() - 9))) {
+						flag = checkFlag(result, "endturn");
+						if (flag != null) {
+							result = flag;
 							break;
+						}
+						
+						flag = checkFlag(result, "lvgame");
+						if (flag != null) {
+							result = flag;
+							if (numPlayers < 2) {
+								levelFin = true;
+								lvlNum = 0;
+								System.out.println(currentPlayer + " has left the game.");
+								break;
+							} else {
+								
+								numPlayers--;
+								
+								Player[] t_players = players.clone();
+								Player[] t_waiting = waiting.clone();
+								Player[] t_leaders = leaders.clone();
+								
+								players = new Player[numPlayers];
+								waiting = new Player[numPlayers];
+								leaders = new Player[numPlayers];
+								
+								int i_p = 0, i_w = 0, i_l = 0;
+								int n_p = 0, n_w = 0, n_l = 0;
+								
+								// Move player from players array
+								while (n_p < numPlayers) {
+									if (currentPlayer.equals(t_players[i_p])) {
+										i_p++;
+									} else {
+										players[n_p++] = t_players[i_p++];
+									}
+								}
+								
+								// Move player from waiting array
+								while (n_w < numPlayers) {
+									if (currentPlayer.equals(t_waiting[i_w])) {
+										i_w++;
+									} else {
+										waiting[n_w++] = t_waiting[i_w++];
+									}
+								}
+									
+								// Move player from leaders array
+								while (n_l < numPlayers) {
+									if (currentPlayer.equals(t_leaders[i_l])) {
+										i_l++;
+									} else {
+										leaders[n_l++] = t_leaders[i_l++];
+									}
+								}
+								
+								break;
+								
+							}
 						}
 						
 						// Output result
@@ -162,10 +231,12 @@ public class Console {
 			// Display level statistics and reset leaderboard
 			System.out.println(" Level " + currentLevel.getNumber() + " Stats:\n----------------");
 			for (int i=0; i<numPlayers; i++) {
-				System.out.println(" Rank " + (i+1) + ": " + leaders[i].getName());
-				players[i] = waiting[i];
-				waiting[i] = null;
-				leaders[i] = null;
+				if (leaders[i] != null) {
+					System.out.println(" Rank " + (i+1) + ": " + leaders[i].getName());
+					players[i] = waiting[i];
+					waiting[i] = null;
+					leaders[i] = null;
+				}
 			}
 			lastLeader = 0;
 		
@@ -180,10 +251,58 @@ public class Console {
 		
 	}
 	
+	// Execute a command from a string
+	public static String executeCommand(Player currPlayer, String cmd) {
+		if (!"".equals(cmd)) {
+			
+			String[] cmds = cmd.split(",");
+			for (String command: cmds) {
+				
+				cmd = command.substring(0, command.indexOf('(')).trim();
+				String arg = command.substring(command.indexOf('(') + 1, command.indexOf(')')).trim();
+				
+				switch(cmd) {
+				
+				case "give":
+					currPlayer.give(new Item(arg));
+					return "You got the " + arg + "!";
+					
+				case "hunger":
+					int hunger = Integer.parseInt(arg);
+					currPlayer.setHunger(currPlayer.getHunger() + hunger);
+					return "Your hunger is replenished by " + arg + "!";
+				
+				case "thirst":
+					int thirst = Integer.parseInt(arg);
+					currPlayer.setThirst(currPlayer.getThirst() + thirst);
+					return "Your thirst is replenished by " + arg + "!";					
+				
+				}
+				
+			}
+			
+		}
+		
+		return "";
+	}
+	
 	/// PRIVATE METHODS ///
 	
+	// Checks if a flag is attached to the end of a string and returns
+	// The rest of the string if true. Else returns null
+	private static String checkFlag(String str, String flag) {
+		flag = "%" + flag + "%";
+		String falg = str.substring(str.length() - flag.length());
+		
+		if (falg.equals(flag)) {
+			return str.substring(0, str.length() - flag.length());
+		} else {
+			return null;
+		}
+	}
+	
 	// Prompts the user for input and then parses the command
-	public static String promptUser(Player player) {
+	private static String promptUser(Player player) {
 		
 		// Output player's stats
 		String stats = "\n" + player + "'s Stats: \n";
@@ -233,6 +352,7 @@ public class Console {
 			} else {
 				return getHelp(arg1) + "%noturn%";
 			}
+
 		
 		case "move":
 		case "mv":
@@ -257,11 +377,7 @@ public class Console {
 			
 		case "look":
 		case "lk":
-			if (arg1 == null) {
-				return player.look();
-			} else {
-				return "\nThe 'look' command requires no arguments.%noturn%";
-			}
+			return player.look();
 			
 		case "consume":	
 		case "drink":
@@ -279,7 +395,7 @@ public class Console {
 				Interactable inter = player.getRoom().findInteractable(arg2);
 				
 				if (key != null && inter != null) {
-					return inter.useWith(key);
+					return inter + ": " + inter.useWith(player, key);
 				} else if (key == null) {
 					return "\nYou don't have a '" + arg1 + "' in your inventory.";
 				} else if (inter == null) {
@@ -294,7 +410,7 @@ public class Console {
 			if (arg1 != null) {
 				Interactable inter = player.getRoom().findInteractable(arg1);
 				if (inter != null) {
-					return inter.interact();
+					return inter + ": " + inter.interact(player);
 				} else {
 					return "\nYou can't see a '" + arg1 + "' in the room";
 				}
@@ -305,29 +421,32 @@ public class Console {
 		case "inventory":
 		case "items":
 		case "iv":
-			if (arg1 == null) {
-				return "\n" + player + "'s Items:\n" + ArrayOutput.sentenceArray(player.getInventory().toArray()) + "%noturn%";
-			} else {
-				return "\nThe 'inventory' command requires no arguments.%noturn%";
-			}
+			return "\n" + player + "'s Items:\n" + ArrayOutput.sentenceArray(player.getInventory().toArray()) + "%noturn%";
 			
 		case "end-turn":
 		case "wait":
 		case "wt":
-			if (arg1 == null) {
-				return "\n" + player + " Has ended their turn.%endturn%";
-			} else {
-				return "\nThe 'wait' command requires no arguments.%noturn%";
-			}
-			
-		}
+			return "\n" + player + " Has ended their turn.%endturn%";
 		
+		case "drop":
+			if (arg1 != null) {
+				return player.drop(new Item(arg1));
+			} else {
+				return "\nThe 'drop' command requires 1 argument.%noturn%";
+			}	
+		
+		case "exit":
+		case "leave":
+			return "\n" + player + " has left the game.%lvgame%";	
+		
+		}
+					
 		return "\nInvalid command.%noturn%";
 		
 	}
 	
 	// Returns the help menu
-	public static String getHelpMenu() {
+	private static String getHelpMenu() {
 		return ""
 				+ "\n  ### Help Menu ### "
 				+ "\n -------------------------------"
@@ -343,12 +462,14 @@ public class Console {
 				+ "\n  interact-with/in <object>"
 				+ "\n  inventory/items/iv"
 				+ "\n  end-turn/wait/wt"
+				+ "\n  drop <item>"
+				+ "\n  exit/leave"
 				+ "\n -------------------------------"
 				;
 	}
 	
 	// Returns a help page for each command
-	public static String getHelp(String cmd) {
+	private static String getHelp(String cmd) {
 		switch(cmd) {
 		
 		case "help":
@@ -520,6 +641,38 @@ public class Console {
 					+ "\n wait"
 					+ "\n wt"
 					;
+		
+		case "drop":
+			return ""
+					+ "\nDROP COMMAND:"
+					+ "\n-------------"
+					+ "\nUsage: drop <item>"
+					+ "\n"
+					+ "\n This will drop any item a player has"
+					+ "\n in their current room."
+					+ "\n"
+					+ "\nExamples:"
+					+ "\n drop Key"
+					+ "\n drop Sandwich"
+					;
+		
+		case "exit":
+		case "leave":
+			return ""
+					+ "\nEXIT COMMAND:"
+					+ "\n-------------"
+					+ "\nUsage: exit/leave"
+					+ "\n"
+					+ "\n This command will drop a player"
+					+ "\n out of the game. The other players"
+					+ "\n can still play though."
+					+ "\n If no players are left, then"
+					+ "\n the game will end."
+					+ "\n"
+					+ "\nExample:"
+					+ "\n exit"
+					+ "\n leave"
+					;
 			
 		default:
 			return "\nI don't recognise that command.";
@@ -528,7 +681,7 @@ public class Console {
 	
 	
 	// Prints out opening info
-	public static String getOpening() {
+	private static String getOpening() {
 		return ""
 				+ "\n   ESCAPE FROM TBZ"
 				+ "\n  -----------------"
