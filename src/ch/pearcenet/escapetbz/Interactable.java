@@ -3,8 +3,8 @@ package ch.pearcenet.escapetbz;
 public interface Interactable {
 	
 	public String getName();
-	public String useWith(Item item);
+	public String useWith(Player player, Item item);
 	public boolean canUseWith(Item item);
-	public String interact();
+	public String interact(Player player);
 
 }

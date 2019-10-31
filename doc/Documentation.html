@@ -574,7 +574,23 @@ of a full room description with comments: (The comments begin with a hash #)</p>
     #You must also tell the game where the player starts and
     #which room they must reach to finish the level
     startroom = rm1
-    endroom = rm2</code></pre>
+    endroom = rm2
+
+    #This creates an interactable in the current room named 'Teacher'
+    #Every interactable name must be 'int' plus a number (0-5)
+    rm1.npc1 = Teacher
+
+    #This defines the default interaction with the object
+    #You can optionally set a command to be run when the
+    #object is interacted with.
+    rm1.npc1.def.msg = Do you want the rest of this sandwich?
+    rm1.npc1.def.cmd = hunger(10)
+
+    #The item interaction can be optionally defined
+    #Otherwise the response will simply be "You can't use that with that"
+    rm1.npc1.itm = Doctor Note
+    rm1.npc1.itm.msg = Oh, here's the elevator key. Get well soon.
+    rm1.npc1.itm.cmd = give(Elevator Key)</code></pre>
 </div>
 </div>
 </div>
@@ -632,7 +648,7 @@ is popping the champagne.</p>
 <h2 id="truedependencies"><a class="anchor" href="#truedependencies"></a>Dependencies</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="truesimpletui-v2-0-0"><a class="anchor" href="#truesimpletui-v2-0-0"></a>SimpleTUI - v2.0.0</h3>
+<h3 id="truesimpletui-v2-0-1"><a class="anchor" href="#truesimpletui-v2-0-1"></a>SimpleTUI - v2.0.1</h3>
 <div class="paragraph">
 <p><a href="https://github.com/Sam36502/SimpleTUI">GitHub Page</a></p>
 </div>
@@ -1491,6 +1507,32 @@ classes, see the "Level Loading" Integration test
 <th class="tableblock halign-left valign-top">Approval</th>
 </tr>
 </thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of commands</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Commands</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">help mv</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Information about mv</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Information about mv</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">look abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Look needs no args</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Look needs no args</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abcdef</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid Command</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid Command</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -1749,6 +1791,194 @@ rm2 = You reach a stairwell to the next floor down and go down it.</code></pre>
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="trueconsole-full-integration-test"><a class="anchor" href="#trueconsole-full-integration-test"></a>Console full Integration Test</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For the full integration test the following text document was used:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># Last Level
+
+# Level Attributes
+startroom = rm0
+endroom = rm4
+
+# First Room
+rm0 = You're in an eerie Classroom with nobody inside. A door leads out to the north.
+
+rm0.door.north = Metal Door
+rm0.door.north.key = Small Key
+rm0.door.north.succmsg = The door swings open swiftly.
+rm0.door.north.failmsg = The door lets out a metallic thud, but doesn't move.
+rm0.door.north.interactmsg = It's a robust metal door. Forcing it wouldn't work.
+
+rm0.i0 = Small Key
+
+rm0.i1 = Sandwich
+rm0.i1.hunger = 10
+rm0.i1.thirst = 0
+
+# Connection
+rm0.north = rm1
+rm1.south = rm0
+
+# Second Room
+rm1 = You're in an airy and bright hallway continuing to the east and west.
+
+# Connections
+rm1.west = rm2
+rm1.east = rm3
+rm2.east = rm1
+rm3.west = rm1
+
+# Third Room
+rm2 = You're at the end of the hallway.
+rm2.i0 = Rusty Key
+
+# Fourth Room
+rm3 = You're at the end of the hallway. You can see some stairs through glass doors to the south.
+rm3.door.south = Glass Door
+rm3.door.south.key = Rusty Key
+
+# Connection
+rm3.south = rm4
+
+# Exit Room
+rm4 = You see a set of stairs heading down and continue down to the next level...</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Console full Integration Test Cases</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Input</th>
+<th class="tableblock halign-left valign-top">Expected</th>
+<th class="tableblock halign-left valign-top">Output</th>
+<th class="tableblock halign-left valign-top">Approval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">move north</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">look</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pickup abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pickup Small Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pickup Sandwich</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eat abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t have that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t have that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eat Sandwich</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eaten</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eaten</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interact-with abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interact-with Metal Door</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Door description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Door description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use abc on abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t have that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t have that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use Small Key on abc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can&#8217;t see that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use Small Key on Metal door</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Door opens</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Door opens</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">go north</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">go west</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pickup Rusty Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Picked up</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inventory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of items</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of items</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">go east (x2)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Room Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OK</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1841,12 +2071,71 @@ improved documentation later.</p>
 free time over the next week.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="trueday-3"><a class="anchor" href="#trueday-3"></a>Day - 3</h3>
+<div class="paragraph">
+<p>16/10/2019</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>During the week we had each completed our parts of the
+classes. We managed to create and unit test all of them.
+We also performed the integration tests for all the
+classes to make sure they would all work together in unison.</p>
+</div>
+<div class="paragraph">
+<p>We were both surprised to see how effective this method
+of development was. Previously, I probably would have
+started with the Console class, but now I see it makes
+more sense to form the OOP model and thoroughly test it
+before implementing the main functionality.</p>
+</div>
+<div class="paragraph">
+<p>After creating and testing the Console class working
+in perfect harmony with all the other classes was a sight
+to behold for junior programmers such as ourselves.
+After that all that was left for programming was to
+make sure that each player was given a set number of turns
+per round and that each player could play until the end of
+level. We also added a leaderboard, so that all the players
+can see who finished first, second, third and etc.</p>
+</div>
+<div class="paragraph">
+<p>We have both decided to update a few parts of the documentation
+and generally polish the finished product, while also
+creating a world based on our original story idea. Now the
+engine is complete, we can work on the actual game.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="trueday-4"><a class="anchor" href="#trueday-4"></a>Day - 4</h3>
+<div class="paragraph">
+<p>22/10/2019</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>Once the engine was complete we decided to start designing
+the levels and planning for extra features we could add in.
+Sam began implementing the generic interactbable object
+functionality, while Amin planned the first three levels.</p>
+</div>
+<div class="paragraph">
+<p>Sam also set up a small website to navigate the documentation.
+It took us a while to get the the documentation standardised.
+Sam had been writing most of the documentation and hadn&#8217;t
+properly understood how the unit-tests are supposed to work.
+Luckily we noticed this during the lesson and were able to
+remedy the situation. Next we decided to finish what we were
+working on over the week so the project should be mostly done
+by the next tuesday.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-10-15 23:21:33 +0200
+Last updated 2019-10-25 17:35:12 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -3,6 +3,7 @@ package ch.pearcenet.escapetbz;
 import java.util.ArrayList;
 
 import ch.pearcenet.escapetbz.exceptions.InventoryFullException;
+import ch.pearcenet.escapetbz.exceptions.RoomFullException;
 import ch.pearcenet.tui.output.ArrayOutput;
 
 public class Player {
@@ -49,9 +50,19 @@ public class Player {
 	public int getHunger() {
 		return hunger;
 	}
+	
+	public void setHunger(int hunger) {
+		this.hunger = hunger;
+		if (this.hunger > 100) this.hunger = 100;
+	}
 
 	public int getThirst() {
 		return thirst;
+	}
+	
+	public void setThirst(int thirst) {
+		this.thirst = thirst;
+		if (this.thirst > 100) this.thirst = 100;
 	}
 	
 	public boolean isAlive() {
@@ -68,16 +79,16 @@ public class Player {
 				+ "\n " + room.getDescription()
 				+ "\n"
 				+ "\nDoors:"
-				+ "\n North: " + (doors[0]==null ? "Clear":doors[0].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
-				+ "\n East: " + (doors[1]==null ? "Clear":doors[1].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
-				+ "\n South: " + (doors[2]==null ? "Clear":doors[2].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
-				+ "\n West: " + (doors[3]==null ? "Clear":doors[3].getName()) + " " + (doors[0].isLocked() ? "Locked":"Unlocked")
+				+ "\n North: " + (doors[0]==null ? "Clear":doors[0].getName() + " " + (doors[0].isLocked() ? "Locked":"Unlocked"))
+				+ "\n East: " + (doors[1]==null ? "Clear":doors[1].getName() + " " + (doors[0].isLocked() ? "Locked":"Unlocked"))
+				+ "\n South: " + (doors[2]==null ? "Clear":doors[2].getName() + " " + (doors[0].isLocked() ? "Locked":"Unlocked"))
+				+ "\n West: " + (doors[3]==null ? "Clear":doors[3].getName() + " " + (doors[0].isLocked() ? "Locked":"Unlocked"))
 				+ "\n"
 				+ "\nItems:"
 				+ "\n " + ArrayOutput.sentenceArray(room.getItems())
 				+ "\n"
 				+ "\nInteractables:"
-				+ "\n " + ArrayOutput.sentenceArray(room.getInteractables())
+				+ "\n " + ArrayOutput.sentenceArray(room.getNPCs())
 				+ "\n"
 				;
 	}
@@ -97,6 +108,24 @@ public class Player {
 		} else {
 			return "You can't go that way.";
 		}
+	}
+	
+	// Drops an item into the current room and removes it from the inventory
+	public String drop(Item item) {
+		try {
+			room.addItem(item);
+		} catch (RoomFullException e) {
+			return "The room is too full; You can't drop that here";
+		}
+		
+		int itemindex = inventory.indexOf(findItem(item.getName()));
+		if (itemindex == -1) {
+			return "You don't have that item in your inventory.";
+		}
+		
+		inventory.remove(itemindex);
+		return "You dropped the " + item;	
+
 	}
 	
 	// Picks up an Item from the current room

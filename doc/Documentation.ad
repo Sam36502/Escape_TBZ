@@ -97,6 +97,23 @@ of a full room description with comments: (The comments begin with a hash #)
     #which room they must reach to finish the level
     startroom = rm1
     endroom = rm2
+    
+    #This creates an interactable in the current room named 'Teacher'
+    #Every interactable name must be 'int' plus a number (0-5)
+    rm1.npc1 = Teacher
+    
+    #This defines the default interaction with the object
+    #You can optionally set a command to be run when the
+    #object is interacted with.
+    rm1.npc1.def.msg = Do you want the rest of this sandwich?
+    rm1.npc1.def.cmd = hunger(10)
+    
+    #The item interaction can be optionally defined
+    #Otherwise the response will simply be "You can't use that with that"
+    rm1.npc1.itm = Doctor Note
+    rm1.npc1.itm.msg = Oh, here's the elevator key. Get well soon.
+    rm1.npc1.itm.cmd = give(Elevator Key)
+    
 ```
 
 Milestones
@@ -730,3 +747,21 @@ and generally polish the finished product, while also
 creating a world based on our original story idea. Now the
 engine is complete, we can work on the actual game.
 
+Day - 4
+~~~~~~~
+22/10/2019
+
+---
+Once the engine was complete we decided to start designing
+the levels and planning for extra features we could add in.
+Sam began implementing the generic interactbable object 
+functionality, while Amin planned the first three levels.
+
+Sam also set up a small website to navigate the documentation.
+It took us a while to get the the documentation standardised.
+Sam had been writing most of the documentation and hadn't
+properly understood how the unit-tests are supposed to work.
+Luckily we noticed this during the lesson and were able to
+remedy the situation. Next we decided to finish what we were
+working on over the week so the project should be mostly done
+by the next tuesday.

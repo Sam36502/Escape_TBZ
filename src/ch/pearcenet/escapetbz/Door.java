@@ -86,7 +86,7 @@ public class Door implements Interactable {
 	}
 	
 	@Override
-	public String useWith(Item item) {
+	public String useWith(Player player, Item item) {
 		
 		if (item.getName().equals(keyItem.getName())) {
 			this.toggle();
@@ -109,7 +109,7 @@ public class Door implements Interactable {
 	}
 
 	@Override
-	public String interact() {
+	public String interact(Player player) {
 		
 		if (this.isLocked()) {
 			return interactmsg + " The path is blocked.";
