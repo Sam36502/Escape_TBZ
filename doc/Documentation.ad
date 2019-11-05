@@ -10,7 +10,6 @@ Table of contents
 * Milestones
 * Dependencies
 * UML Class Diagram
-* UML Sequence Diagram
 * UML Use case Diagram
 * Use Cases
 * Unit Test Cases
@@ -157,7 +156,7 @@ is popping the champagne.
 Dependencies
 ------------
 
-SimpleTUI - v2.0.1
+SimpleTUI - v2.0.2
 ~~~~~~~~~~~~~~~~~~
 link:https://github.com/Sam36502/SimpleTUI[GitHub Page]
 
@@ -168,23 +167,16 @@ The library itself was made by Sam previously.
 Therefore, no code was actually taken from any
 third-parties for the input validation.
 
-
 UML Class Diagram
 -----------------
-[IMPORTANT]
-Insert completed diagram here
+image::UML_classes.png[UML Class Diagram]
 
-UML Sequence Diagram
---------------------
-[IMPORTANT]
-Insert completed diagram here
-
+<<<
 UML Use Case Diagram
 --------------------
-[IMPORTANT]
-Insert completed diagram here
+image::UML_use_cases.png[UML Use Case Diagram]
 
-
+<<<
 Use Cases
 ---------
 
@@ -331,7 +323,7 @@ UC06 - Get Help:::
         The user is given the information they
         requested.
         
-
+<<<
 Unit Test Cases
 ---------------
 
@@ -478,6 +470,7 @@ Console
 | abcdef   | Invalid Command      | Invalid Command      | OK
 |====================
 
+<<<
 Integration Test Cases
 ----------------------
 [NOTE]
@@ -641,6 +634,7 @@ rm4 = You see a set of stairs heading down and continue down to the next level..
 | use rusty key on glass door | 
 |====================
 
+<<<
 Work Journal
 ------------
 

@@ -1,0 +1,79 @@
+############
+# LEVEL 09 #
+############
+
+startroom = rm8
+endroom = rm3
+
+#####################
+# Room Descriptions #
+#####################
+
+rm8 = You are at the bottom of a flight of stairs. A long hallway continues to the north.
+rm4 = You are in the middle of a corridor continuing from north to south. There is a student here screeching incoherently.
+rm4.npc0 = Crazy Person
+rm4.npc0.def.msg = THE ALIENS! THE ALIENS! THEY HAVE FINALLY COME TO EXACT REVENGE UPON THE HUMAN RACE.
+rm4.npc0.def.cmd = 
+
+rm0 = You are at the corner of a hallway leading south and east.
+rm0.i0 = Bottle of Water
+rm0.i0.thirst = 40
+rm0.i0.hunger = 0
+
+rm1 = You are at the corner of a hallway leading west and south. A Sad Child is sitting here.
+rm1.door.south = Sad Child
+rm1.door.south.key = Teddy Bear
+rm1.door.south.succmsg = The kid smiles and thanks you. He will now let you pass to the south.
+rm1.door.south.failmsg = The kid isn't interested in that. He's looking for his Teddy Bear.
+rm1.door.south.interactmsg = The sad kid says he won't get out of your way unless you find his Teddy Bear for him.
+
+rm5 = You are in the middle of a corridor leading from north to south. There is a locked door to the east.
+rm5.door.east = Classroom Door
+rm5.door.east.key = Classroom Key
+
+rm6 = You are in the back of a small classroom with a door leading out to the east.
+rm6.door.east = Back Door
+rm6.door.east.key = Back Door Key
+
+rm7 = You are in a short hall with stairs leading down to the north.
+rm3 = <Level End>
+rm9 = You are at the end of a hallway that leads north.
+rm9.i0 = Classroom Key
+
+rm10 = You are at the front of a classroom with a small closet to the east.
+rm11 = You are in a small closet that smells faintly musty. You notice the glint of a key on the shelf.
+rm11.i0 = Back Door Key
+
+###############
+# Connections #
+###############
+
+rm8.north = rm4
+rm4.south = rm8
+
+rm4.north = rm0
+rm0.south = rm4
+
+rm5.north = rm1
+rm1.south = rm5
+
+rm9.north = rm5
+rm5.south = rm9
+
+rm10.north = rm6
+rm6.south = rm10
+
+rm7.north = rm3
+rm3.south = rm7
+
+rm0.east = rm1
+rm1.west = rm0
+
+rm10.east = rm11
+rm11.west = rm10
+
+rm5.east = rm5
+rm6.west = rm5
+
+rm6.east = rm7
+rm7.west = rm6
