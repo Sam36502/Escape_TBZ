@@ -1,0 +1,9 @@
+# Simpler test map for quick testing
+
+startroom = rm0
+endroom = rm1
+
+rm0 = You're at the top of a set of stairs going to the east.
+rm0.east = rm1
+
+rm1 = You run down the stairs to the floor below.

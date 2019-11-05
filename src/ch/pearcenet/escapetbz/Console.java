@@ -67,8 +67,11 @@ public class Console {
 		
 		// Determine highest numbered level
 		int firstLevelIndex = MAX_FLOORS-1;
-		for (Level curr: levels) if (curr == null) firstLevelIndex--;
-		
+		for (int i=MAX_FLOORS-1; i>=0; i--) {
+			if (levels[i] == null) continue;
+			firstLevelIndex = i;
+			break;
+		}
 		
 		/// INTRODUCTION ///
 		
