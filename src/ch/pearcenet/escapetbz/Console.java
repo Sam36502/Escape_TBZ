@@ -8,7 +8,7 @@ import ch.pearcenet.tui.output.ArrayOutput;
 public class Console {
 	
 	// GLOBAL CONSTANTS
-	public static final String VERSION = "v1.1";
+	public static final String VERSION = "v1.1.2";
 	public static final int MAX_FLOORS = 25;
 	public static final int MAX_PLAYERS = 4;
 	public static final int MAX_INVENTORY = 10;

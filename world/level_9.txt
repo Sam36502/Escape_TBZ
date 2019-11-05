@@ -1,76 +1,79 @@
 ############
-# LEVEL 10 #
+# LEVEL 09 #
 ############
 
-startroom = rm3
-endroom = rm8
+startroom = rm8
+endroom = rm3
 
 #####################
 # Room Descriptions #
 #####################
 
-rm3 = You are among the other students in the classroom. They are all on edge from the alarms going off.
-rm2 = You are at the back of the classroom by a row of cupboards.
-rm2.npc0 = Cardboard Box
-rm2.npc0.def.msg = You look inside the box a find the Supply Closet Key.
-rm2.npc0.def.cmd = give(Supply Closet Key)
+rm8 = You are at the bottom of a flight of stairs. A long hallway continues to the north.
+rm4 = You are in the middle of a corridor continuing from north to south. There is a student here screeching incoherently.
+rm4.npc0 = Crazy Person
+rm4.npc0.def.msg = THE ALIENS! THE ALIENS! THEY HAVE FINALLY COME TO EXACT REVENGE UPON THE HUMAN RACE.
+rm4.npc0.def.cmd = 
 
-rm7 = You are at the front of the classroom, right by the teacher's desk.
-rm6 = You are at the front of the classroom by the front door.
+rm0 = You are at the corner of a hallway leading south and east.
+rm0.i0 = Bottle of Water
+rm0.i0.thirst = 40
+rm0.i0.hunger = 0
 
-rm1 = You are standing in a hallway.
-rm1.door.south = South Door
-rm1.door.south.key = Hall Key
-rm1.door.west = West Door
-rm1.door.west.key = Supply Closet Key
+rm1 = You are at the corner of a hallway leading west and south. A Sad Child is sitting here.
+rm1.door.south = Sad Child
+rm1.door.south.key = Teddy Bear
+rm1.door.south.succmsg = The kid smiles and thanks you. He will now let you pass to the south.
+rm1.door.south.failmsg = The kid isn't interested in that. He's looking for his Teddy Bear.
+rm1.door.south.interactmsg = The sad kid says he won't get out of your way unless you find his Teddy Bear for him.
 
-rm5 = You are in a small classroom with flickering lights and a girl crying in the corner.
-rm4 = You are in the teacher's lounge. Luckily nobody is here at the moment.
-rm4.door.north = Supply Closet Door
-rm4.door.north.key = Supply Closet Key
+rm5 = You are in the middle of a corridor leading from north to south. There is a locked door to the east.
+rm5.door.east = Classroom Door
+rm5.door.east.key = Classroom Key
 
-rm0 = You are in a small supply closet with some useful items.
-rm11 = You are in a small supply closet. You notice a shiny key on the shelf.
-rm11.i0 = Hall Key
+rm6 = You are in the back of a small classroom with a door leading out to the east.
+rm6.door.east = Back Door
+rm6.door.east.key = Back Door Key
 
-rm9 = You are in a hallway with the stairs to the floor below to the west.
-rm8 = <Level End>
+rm7 = You are in a short hall with stairs leading down to the north.
+rm3 = <Level End>
+rm9 = You are at the end of a hallway that leads north.
+rm9.i0 = Classroom Key
+
+rm10 = You are at the front of a classroom with a small closet to the east.
+rm11 = You are in a small closet that smells faintly musty. You notice the glint of a key on the shelf.
+rm11.i0 = Back Door Key
 
 ###############
 # Connections #
 ###############
 
-rm3.south = rm7
-rm7.north = rm3
+rm8.north = rm4
+rm4.south = rm8
 
-rm3.west = rm2
-rm2.east = rm3
-
-rm2.south = rm6
-rm6.north = rm2
-
-rm7.west = rm6
-rm6.east = rm7
-
-rm7.south = rm11
-rm11.north = rm7
-
-rm2.west = rm1
-rm1.east = rm2
-
-rm1.south = rm5
-rm5.north = rm1
-
-rm1.west = rm0
-rm0.east = rm1
-
-rm0.south = rm4
 rm4.north = rm0
+rm0.south = rm4
 
-rm4.east = rm5
-rm5.west = rm4
+rm5.north = rm1
+rm1.south = rm5
 
-rm5.south = rm9
 rm9.north = rm5
+rm5.south = rm9
 
-rm9.west = rm8
+rm10.north = rm6
+rm6.south = rm10
+
+rm7.north = rm3
+rm3.south = rm7
+
+rm0.east = rm1
+rm1.west = rm0
+
+rm10.east = rm11
+rm11.west = rm10
+
+rm5.east = rm5
+rm6.west = rm5
+
+rm6.east = rm7
+rm7.west = rm6

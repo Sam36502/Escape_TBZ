@@ -16,6 +16,10 @@ rm2.npc0.def.msg = You look inside the box a find the Supply Closet Key.
 rm2.npc0.def.cmd = give(Supply Closet Key)
 
 rm7 = You are at the front of the classroom, right by the teacher's desk.
+rm7.npc0 = Teacher
+rm7.npc0.def.msg = Why won't everyone calm down? It's probably just a siren test. Right?
+rm7.npc0.def.cmd = 
+
 rm6 = You are at the front of the classroom by the front door.
 
 rm1 = You are standing in a hallway.
@@ -25,11 +29,20 @@ rm1.door.west = West Door
 rm1.door.west.key = Supply Closet Key
 
 rm5 = You are in a small classroom with flickering lights and a girl crying in the corner.
+rm5.npc0 = Crying Girl
+rm5.npc0.def.msg = WE ARE ALL GOING TO DIE!!!
+rm5.npc0.def.cmd = 
+
 rm4 = You are in the teacher's lounge. Luckily nobody is here at the moment.
 rm4.door.north = Supply Closet Door
 rm4.door.north.key = Supply Closet Key
 
 rm0 = You are in a small supply closet with some useful items.
+rm0.i0 = Sandwich
+rm0.i0.hunger = 40
+rm0.i0.thirst = 0
+rm0.i1 = Teddy Bear
+
 rm11 = You are in a small supply closet. You notice a shiny key on the shelf.
 rm11.i0 = Hall Key
 
