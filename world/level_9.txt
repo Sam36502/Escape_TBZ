@@ -1,0 +1,76 @@
+############
+# LEVEL 10 #
+############
+
+startroom = rm3
+endroom = rm8
+
+#####################
+# Room Descriptions #
+#####################
+
+rm3 = You are among the other students in the classroom. They are all on edge from the alarms going off.
+rm2 = You are at the back of the classroom by a row of cupboards.
+rm2.npc0 = Cardboard Box
+rm2.npc0.def.msg = You look inside the box a find the Supply Closet Key.
+rm2.npc0.def.cmd = give(Supply Closet Key)
+
+rm7 = You are at the front of the classroom, right by the teacher's desk.
+rm6 = You are at the front of the classroom by the front door.
+
+rm1 = You are standing in a hallway.
+rm1.door.south = South Door
+rm1.door.south.key = Hall Key
+rm1.door.west = West Door
+rm1.door.west.key = Supply Closet Key
+
+rm5 = You are in a small classroom with flickering lights and a girl crying in the corner.
+rm4 = You are in the teacher's lounge. Luckily nobody is here at the moment.
+rm4.door.north = Supply Closet Door
+rm4.door.north.key = Supply Closet Key
+
+rm0 = You are in a small supply closet with some useful items.
+rm11 = You are in a small supply closet. You notice a shiny key on the shelf.
+rm11.i0 = Hall Key
+
+rm9 = You are in a hallway with the stairs to the floor below to the west.
+rm8 = <Level End>
+
+###############
+# Connections #
+###############
+
+rm3.south = rm7
+rm7.north = rm3
+
+rm3.west = rm2
+rm2.east = rm3
+
+rm2.south = rm6
+rm6.north = rm2
+
+rm7.west = rm6
+rm6.east = rm7
+
+rm7.south = rm11
+rm11.north = rm7
+
+rm2.west = rm1
+rm1.east = rm2
+
+rm1.south = rm5
+rm5.north = rm1
+
+rm1.west = rm0
+rm0.east = rm1
+
+rm0.south = rm4
+rm4.north = rm0
+
+rm4.east = rm5
+rm5.west = rm4
+
+rm5.south = rm9
+rm9.north = rm5
+
+rm9.west = rm8
