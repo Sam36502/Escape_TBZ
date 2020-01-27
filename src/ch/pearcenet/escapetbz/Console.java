@@ -2,6 +2,7 @@ package ch.pearcenet.escapetbz;
 
 import java.io.File;
 
+import ch.pearcenet.escapetbz.Map.MapBuilder;
 import ch.pearcenet.tui.input.Input;
 import ch.pearcenet.tui.output.ArrayOutput;
 
@@ -37,7 +38,7 @@ public class Console {
 			}
 			
 			if (args.length > 1 && ("-t".equals(args[1]) || "--trace".equals(args[1]))) {
-				System.out.println("[INFO] Logging Info to console activated.");
+				System.out.println("[INFO] Logging Info to console activatedy.");
 				LOGLEVEL = FileHandler.Lvl.INFO;
 			}
 			
@@ -108,6 +109,7 @@ public class Console {
 			
 			// Put all the players into the level
 			for (int i=0; i<numPlayers; i++) players[i].setRoom(currentLevel.getStart());
+			MapBuilder mapBuilder = new MapBuilder(currentLevel.getRooms(), currentLevel.getStart(), currentLevel.getEnd());
 			
 			System.out.println("\nLevel " + currentLevel.getNumber() + ":");
 			boolean levelFin = false;
